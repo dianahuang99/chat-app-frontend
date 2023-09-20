@@ -1,14 +1,16 @@
-import { useContext } from "react";
+import React, { useContext } from "react";
 import { UserContext } from "./UserContext";
-import RegisterAndLoginForm from "./RegisterAndLoginForm";
-import Chat from "./Chat";
+import HomepageForm from "./HomepageForm";
+import ChatBox from "./ChatBox.jsx";
 
-export default function Routes() {
+function Routes() {
   const { username, id } = useContext(UserContext);
 
   if (username) {
-    return <Chat />;
+    return <ChatBox />;
   }
 
-  return <RegisterAndLoginForm />;
+  return <HomepageForm />;
 }
+
+export default Routes

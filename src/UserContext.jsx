@@ -7,10 +7,15 @@ export function UserContextProvider({children}){
     const [username, setUsername] = useState(null)
     const [id, setId] = useState(null)
     useEffect(()=>{
-        axios.get('/profile').then(response => {
-            setId(response.data.userId)
-            setUsername(response.data.username)
-        })
+        if(username){
+            try{axios.get('/profile').then(response => {
+                setId(response.data.userId)
+                setUsername(response.data.username)
+            })}
+            catch (err){
+                throw err
+            }
+        }
     },[])
 
     return(
