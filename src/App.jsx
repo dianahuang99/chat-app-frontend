@@ -5,7 +5,7 @@ import Routes from "./Routes"
 
 function App() {
 
-  axios.defaults.baseURL = 'http://localhost:4040';
+  axios.defaults.baseURL = process.env.SERVER_BASE_URL || 'http://localhost:4040';
   axios.defaults.withCredentials = true;
 
 

@@ -19,9 +19,9 @@
     width: 12px; /* Adjust the width as needed */
   }
   
-  /* Style the scrollbar thumb (the draggable part) */
+ 
 ::-webkit-scrollbar-thumb {
-    background-color: #a0f5ca; /* Set the background color to match your background */
-    border-radius: 10px; /* Add rounded corners to the thumb */
+    background-color: #a0f5ca;
+    border-radius: 10px;
   }
 
