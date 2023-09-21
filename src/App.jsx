@@ -4,8 +4,12 @@ import { UserContextProvider } from "./UserContext";
 import Routes from "./Routes"
 
 function App() {
-
-  axios.defaults.baseURL = process.env.SERVER_BASE_URL || 'http://localhost:4040';
+  if(process.env.SERVER_BASE_URL){
+    axios.defaults.baseURL = SERVER_BASE_URL
+  } else{
+    axios.defaults.baseURL = 'http://localhost:4040';
+  }
+  
   axios.defaults.withCredentials = true;
 
 
