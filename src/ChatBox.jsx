@@ -60,7 +60,7 @@ function ChatBox() {
 
   async function logout() {
     try {
-      await axios.post("/logout");
+      await axios.post(`${axios.defaults.baseURL}/logout`);
       setUsername(null);
       setId(null);
       setWebSocket(null);
@@ -80,7 +80,9 @@ function ChatBox() {
         })
       );
       if (file) {
-        const res = await axios.get("/messages/" + targetUserId);
+        const res = await axios.get(
+          `${axios.defaults.baseURL}/messages/` + targetUserId
+        );
         setMessageHistory(res.data);
       } else {
         setNewMessage("");
@@ -137,7 +139,7 @@ function ChatBox() {
   useEffect(() => {
     const fetchOfflineUsers = async () => {
       try {
-        const res = await axios.get("/people");
+        const res = await axios.get(`${axios.defaults.baseURL}/people`);
         const offlineUsersArr = [];
         res.data.forEach((user) => {
           if (user._id !== id && !onlineUsers.hasOwnProperty(user._id)) {
@@ -158,9 +160,11 @@ function ChatBox() {
 
   useEffect(() => {
     if (targetUserId) {
-      axios.get("/messages/" + targetUserId).then((res) => {
-        setMessageHistory(res.data);
-      });
+      axios
+        .get(`${axios.defaults.baseURL}/messages/` + targetUserId)
+        .then((res) => {
+          setMessageHistory(res.data);
+        });
     }
   }, [targetUserId]);
 

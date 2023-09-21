@@ -14,12 +14,17 @@ function HomepageForm() {
   const [flashRegisterVisible, setFlashRegisterVisible] = useState(true);
   const [clickedLogin, setClickedLogin] = useState(0);
   const { setUsername: setLoggedInUsername, setId } = useContext(UserContext);
+  // const BASE_URL = process.env.REACT_APP_BASE_URL || "http://localhost:4040";
 
   async function handleSubmit(evt) {
     evt.preventDefault();
-    const url = isLoginOrRegister === "register" ? "register" : "login";
+    const endpoint = isLoginOrRegister === "register" ? "register" : "login";
+    // const url = `${BASE_URL}/${endpoint}`;
     try {
-      const { data } = await axios.post(url, { username, password });
+      const { data } = await axios.post(
+        `${axios.defaults.baseURL}/${endpoint}`,
+        { username, password }
+      );
       console.log("sent over");
       setLoggedInUsername(username);
       setId(data.id);

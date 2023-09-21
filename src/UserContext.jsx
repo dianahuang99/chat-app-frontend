@@ -8,7 +8,7 @@ export function UserContextProvider({children}){
     const [id, setId] = useState(null)
     useEffect(()=>{
         if(username){
-            try{axios.get('/profile').then(response => {
+            try{axios.get(`${axios.defaults.baseURL}/profile`).then(response => {
                 setId(response.data.userId)
                 setUsername(response.data.username)
             })}
