@@ -18,10 +18,7 @@ function HomepageForm() {
   async function handleSubmit(evt) {
     evt.preventDefault();
     const url = isLoginOrRegister === "register" ? "register" : "login";
-    console.log("tryyyyyyyy");
     try {
-      console.log("tryyyyyyyy 2");
-
       const { data } = await axios.post(url, { username, password });
       console.log("sent over");
       setLoggedInUsername(username);

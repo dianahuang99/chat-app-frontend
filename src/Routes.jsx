@@ -9,8 +9,9 @@ function Routes() {
   if (username) {
     return <ChatBox />;
   }
-
-  return <HomepageForm />;
+  else {
+    return <HomepageForm />;
+  }
 }
 
 export default Routes

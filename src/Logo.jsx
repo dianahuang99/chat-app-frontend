@@ -2,7 +2,7 @@ import React from "react";
 
 function Logo() {
   return (
-    <div className="text-green-600 font-bold flex gap-2 p-4">
+    <div className="text-green-300 font-bold flex gap-2 p-4 text-xl">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"

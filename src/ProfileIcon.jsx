@@ -18,15 +18,15 @@ function ProfileIcon({ userId, username, online }) {
   const color = userId === undefined ? "bg-purple-200" : colors[colorIdx];
 
   return (
-    <div className={color + " w-8 h-8 relative rounded-full flex items-center"}>
-      <div className="text-center w-full text-white">
-        {username ? username[0].toUpperCase() : "a"}
+    <div className={color + " w-10 h-10 relative rounded-full flex items-center"}>
+      <div className="text-center w-full text-white text-xl font-bold">
+        {username ? username[0].toUpperCase() : "A"}
       </div>
       {online && (
-        <div className="absolute w-3 h-3 bg-green-400 bottom-0 right-0 rounded-full border border-white"></div>
+        <div className="absolute w-3.5 h-3.5 bg-green-400 bottom-0 right-0 rounded-full border border-white"></div>
       )}
       {!online && (
-        <div className="absolute w-3 h-3 bg-gray-400 bottom-0 right-0 rounded-full border border-white"></div>
+        <div className="absolute w-3.5 h-3.5 bg-gray-400 bottom-0 right-0 rounded-full border border-white"></div>
       )}
     </div>
   );
