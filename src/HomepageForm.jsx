@@ -14,12 +14,10 @@ function HomepageForm() {
   const [flashRegisterVisible, setFlashRegisterVisible] = useState(true);
   const [clickedLogin, setClickedLogin] = useState(0);
   const { setUsername: setLoggedInUsername, setId } = useContext(UserContext);
-  // const BASE_URL = process.env.REACT_APP_BASE_URL || "http://localhost:4040";
 
   async function handleSubmit(evt) {
     evt.preventDefault();
     const endpoint = isLoginOrRegister === "register" ? "register" : "login";
-    // const url = `${BASE_URL}/${endpoint}`;
     try {
       const { data } = await axios.post(
         `${axios.defaults.baseURL}/${endpoint}`,
@@ -42,7 +40,9 @@ function HomepageForm() {
       console.log("runnnn");
       if (clickedLogin > 0) {
         try {
-          const response = await axios.get("/api/flash-messages");
+          const response = await axios.get(
+            `${axios.defaults.baseURL}/api/flash-messages`
+          );
           isLoginOrRegister === "register"
             ? setFlashRegisterError(response.data.flashMessages.error)
             : setFlashLoginError(response.data.flashMessages.error);
