@@ -48,6 +48,8 @@ function HomepageForm() {
             : setFlashLoginError(response.data.flashMessages.error);
 
           console.log(flashLoginError);
+          console.log("**********");
+          console.log(response.data);
         } catch (err) {
           console.log("flash message didn't work");
           console.log(err);
