@@ -23,21 +23,18 @@ function HomepageForm() {
         `${axios.defaults.baseURL}/${endpoint}`,
         { username, password }
       );
-      console.log("sent over");
       setLoggedInUsername(username);
       setId(data.id);
     } catch (err) {
       console.log("wrong password/username");
 
       setClickedLogin((prevClicks) => prevClicks + 1);
-      console.log(clickedLogin);
       console.log(err);
     }
   }
 
   useEffect(() => {
     const fetchFlashMessages = async () => {
-      console.log("run flash messages");
       if (clickedLogin > 0) {
         try {
           const response = await axios.get(
@@ -46,12 +43,7 @@ function HomepageForm() {
           isLoginOrRegister === "register"
             ? setFlashRegisterError(response.data.flashMessages.error)
             : setFlashLoginError(response.data.flashMessages.error);
-
-          console.log(flashLoginError);
-          console.log("**********");
-          console.log(response.data);
         } catch (err) {
-          console.log("flash message didn't work");
           console.log(err);
         }
       }
