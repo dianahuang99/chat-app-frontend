@@ -78,33 +78,35 @@ function ChatBox() {
 
   async function sendMessage(evt, file = null) {
     if (evt) evt.preventDefault();
-    try {
-      webSocket.send(
-        JSON.stringify({
-          recipient: targetUserId,
-          text: newMessage,
-          file,
-        })
-      );
-      if (file) {
-        const res = await axios.get(
-          `${axios.defaults.baseURL}/messages/` + targetUserId
-        );
-        setMessageHistory(res.data);
-      } else {
-        setNewMessage("");
-        setMessageHistory((prev) => [
-          ...prev,
-          {
-            text: newMessage,
-            sender: id,
+    if (newMessage !== "") {
+      try {
+        webSocket.send(
+          JSON.stringify({
             recipient: targetUserId,
-            _id: Date.now(),
-          },
-        ]);
+            text: newMessage,
+            file,
+          })
+        );
+        if (file) {
+          const res = await axios.get(
+            `${axios.defaults.baseURL}/messages/` + targetUserId
+          );
+          setMessageHistory(res.data);
+        } else {
+          setNewMessage("");
+          setMessageHistory((prev) => [
+            ...prev,
+            {
+              text: newMessage,
+              sender: id,
+              recipient: targetUserId,
+              _id: Date.now(),
+            },
+          ]);
+        }
+      } catch (error) {
+        console.log("Error occurred while sending message:", error);
       }
-    } catch (error) {
-      console.log("Error occurred while sending message:", error);
     }
   }
 

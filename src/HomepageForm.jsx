@@ -37,7 +37,7 @@ function HomepageForm() {
 
   useEffect(() => {
     const fetchFlashMessages = async () => {
-      console.log("runnnn");
+      console.log("run flash messages");
       if (clickedLogin > 0) {
         try {
           const response = await axios.get(
@@ -49,7 +49,7 @@ function HomepageForm() {
 
           console.log(flashLoginError);
         } catch (err) {
-          console.log("nope didn't work");
+          console.log("flash message didn't work");
           console.log(err);
         }
       }
