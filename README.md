@@ -2,6 +2,8 @@
 
 Welcome to my React Chat App! This application allows users to register, log in, and send real-time messages to each other. It also provides a feature to see who's online and who's offline.
 
+**Deployed Link:** [Live Demo](https://chat-app-frontend-i6dy.onrender.com/)
+
 ## Features
 
 - **User Registration and Authentication:** Users can create accounts and log in securely using JWT (JSON Web Tokens) authentication.
