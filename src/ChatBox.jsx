@@ -26,7 +26,14 @@ function ChatBox() {
     connectToWebSocket();
   }, [targetUserId]);
   function connectToWebSocket() {
-    const webSocket = new WebSocket("ws://localhost:4040");
+    let webSocketURL = "ws://";
+    if (import.meta.env.VITE_REACT_APP_BASE_URL) {
+      const backendURL = import.meta.env.VITE_REACT_APP_BASE_URL;
+      webSocketURL += backendURL.slice(8);
+    } else {
+      webSocketURL += "localhost:4040";
+    }
+    const webSocket = new WebSocket(webSocketURL);
     setWebSocket(webSocket);
     webSocket.addEventListener("message", handleMessage);
     webSocket.addEventListener("close", () => {
