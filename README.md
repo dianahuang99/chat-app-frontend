@@ -12,9 +12,17 @@ Welcome to my React Chat App! This application allows users to register, log in,
 
 - **Online Presence:** The app displays the list of online and offline users by using a grey or green dot to indictate the online status, letting you know who is currently active.
 
+- **Random Content Generator:** Users can click their respective buttons and send each other random jokes, quotes, and tarot card readings along with their meanings.
+
 ## Important Demo Note
 
 Please note that to fully experience the real-time messaging feature and online presence, it's recommended to demo the app with two different browsers simultaneously. For example, you can log in with one user account using Google Chrome and log in with another user account using Mozilla Firefox. This will allow you to send messages between two separate accounts and see the online status change accordingly.
+
+## External APIs Used
+
+- [Joke API](https://sv443.net/jokeapi/v2/): Delivers random jokes for an entertaining chat experience.
+- [ZenQuotes API](https://docs.zenquotes.io/): Offers inspirational and thought-provoking quotes to share with others.
+- [Tarot API](https://tarot-api-3hv5.onrender.com/): Provides random tarot card readings along with their meanings for users interested in spirituality.
 
 ## Technologies Used
 

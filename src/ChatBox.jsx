@@ -79,36 +79,29 @@ function ChatBox() {
     }
   }
 
-  async function sendJoke(evt, file = null) {
+  async function sendJoke(evt) {
     if (evt) evt.preventDefault();
-    const res = await axios.get("https://v2.jokeapi.dev/joke/Any?type=single");
+    const res = await axios.get(`${axios.defaults.baseURL}/joke`);
     // console.log("res", res?.data || "no data");
-    console.log(res);
+    console.log(res ? res.data.joke : "no data");
     try {
       webSocket.send(
         JSON.stringify({
           recipient: targetUserId,
-          text: "sending jokeee",
-          file,
+          text: res.data.joke,
         })
       );
-      if (file) {
-        const res = await axios.get(
-          `${axios.defaults.baseURL}/messages/` + targetUserId
-        );
-        setMessageHistory(res.data);
-      } else {
-        setNewMessage("");
-        setMessageHistory((prev) => [
-          ...prev,
-          {
-            text: "sending jokeee",
-            sender: id,
-            recipient: targetUserId,
-            _id: Date.now(),
-          },
-        ]);
-      }
+
+      setNewMessage("");
+      setMessageHistory((prev) => [
+        ...prev,
+        {
+          text: res.data.joke,
+          sender: id,
+          recipient: targetUserId,
+          _id: Date.now(),
+        },
+      ]);
     } catch (error) {
       console.log("Error occurred while sending message:", error);
     }
@@ -116,11 +109,62 @@ function ChatBox() {
     console.log("sent joke");
   }
 
-  function sendTarot() {
+  async function sendTarot(evt) {
+    if (evt) evt.preventDefault();
+    const res = await axios.get(`${axios.defaults.baseURL}/tarot`);
+    console.log(res.data || "no data");
+    const tarotCard = `${res.data.name} - ${res.data.meaning_up}`;
+    try {
+      webSocket.send(
+        JSON.stringify({
+          recipient: targetUserId,
+          text: tarotCard,
+        })
+      );
+
+      setNewMessage("");
+      setMessageHistory((prev) => [
+        ...prev,
+        {
+          text: tarotCard,
+          sender: id,
+          recipient: targetUserId,
+          _id: Date.now(),
+        },
+      ]);
+    } catch (error) {
+      console.log("Error occurred while sending message:", error);
+    }
     console.log("sent Tarot");
   }
 
-  function sendQuote() {
+  async function sendQuote(evt) {
+    if (evt) evt.preventDefault();
+    const res = await axios.get(`${axios.defaults.baseURL}/quote`);
+    // console.log("res", res?.data || "no data");
+    console.log(res ? res.data.h : "no data");
+    const quote = `${res.data.q} -${res.data.a}`;
+    try {
+      webSocket.send(
+        JSON.stringify({
+          recipient: targetUserId,
+          text: quote,
+        })
+      );
+
+      setNewMessage("");
+      setMessageHistory((prev) => [
+        ...prev,
+        {
+          text: quote,
+          sender: id,
+          recipient: targetUserId,
+          _id: Date.now(),
+        },
+      ]);
+    } catch (error) {
+      console.log("Error occurred while sending message:", error);
+    }
     console.log("sent Quote");
   }
 
@@ -300,14 +344,14 @@ function ChatBox() {
                   <div
                     key={message._id}
                     className={
-                      message.sender === id ? "text-right" : "text-left"
+                      " " + (message.sender === id ? "text-right" : "text-left")
                     }
                   >
                     <div
                       className={
-                        "text-left inline-block p-2 my-2 rounded-md text-base " +
+                        "text-left inline-block max-w-md my-2 rounded-md text-base " +
                         (message.sender === id
-                          ? "bg-green-500 text-white mr-3"
+                          ? "bg-green-600 text-white mr-3"
                           : "bg-white text-gray-500 ml-2")
                       }
                     >
@@ -315,10 +359,13 @@ function ChatBox() {
                         <img
                           src={message.text}
                           alt="Image"
-                          style={{ maxWidth: "100%", maxHeight: "200px" }}
+                          style={{ maxWidth: "100%", maxHeight: "250px" }}
+                          className="p-2"
                         />
                       ) : (
-                        message.text
+                        <div className="break-words text-lg px-4 py-2">
+                          {message.text.replace(/\\n/g, "\n")}
+                        </div>
                       )}
                       {message.file && (
                         <div className="">
@@ -402,7 +449,7 @@ function ChatBox() {
               </label>
               <button
                 type="submit"
-                className="bg-green-500 p-2 text-white rounded-sm"
+                className="bg-green-600 p-2 text-white rounded-sm"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
