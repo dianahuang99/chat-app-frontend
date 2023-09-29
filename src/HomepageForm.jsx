@@ -46,6 +46,7 @@ function HomepageForm() {
             : setFlashLoginError(response.data.flashMessages.error);
         } catch (err) {
           console.log(err);
+          console.log("flash messages didn't work")
         }
       }
     };
