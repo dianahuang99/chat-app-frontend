@@ -22,9 +22,12 @@ function ChatBox() {
   const [messageHistory, setMessageHistory] = useState([]);
   const { username, id, setId, setUsername } = useContext(UserContext);
   const bottomOfChatBoxSpace = useRef();
+  const imageUrlRegex = /\.(jpeg|jpg|gif|png)$/;
+
   useEffect(() => {
     connectToWebSocket();
   }, [targetUserId]);
+
   function connectToWebSocket() {
     let webSocketURL = "";
     if (import.meta.env.VITE_REACT_APP_BASE_URL) {
@@ -74,6 +77,51 @@ function ChatBox() {
     } catch (error) {
       console.error("Logout failed:", error);
     }
+  }
+
+  async function sendJoke(evt, file = null) {
+    if (evt) evt.preventDefault();
+    const res = await axios.get("https://v2.jokeapi.dev/joke/Any?type=single");
+    // console.log("res", res?.data || "no data");
+    console.log(res);
+    try {
+      webSocket.send(
+        JSON.stringify({
+          recipient: targetUserId,
+          text: "sending jokeee",
+          file,
+        })
+      );
+      if (file) {
+        const res = await axios.get(
+          `${axios.defaults.baseURL}/messages/` + targetUserId
+        );
+        setMessageHistory(res.data);
+      } else {
+        setNewMessage("");
+        setMessageHistory((prev) => [
+          ...prev,
+          {
+            text: "sending jokeee",
+            sender: id,
+            recipient: targetUserId,
+            _id: Date.now(),
+          },
+        ]);
+      }
+    } catch (error) {
+      console.log("Error occurred while sending message:", error);
+    }
+
+    console.log("sent joke");
+  }
+
+  function sendTarot() {
+    console.log("sent Tarot");
+  }
+
+  function sendQuote() {
+    console.log("sent Quote");
   }
 
   async function sendMessage(evt, file = null) {
@@ -263,7 +311,15 @@ function ChatBox() {
                           : "bg-white text-gray-500 ml-2")
                       }
                     >
-                      {message.text}
+                      {imageUrlRegex.test(message.text) ? (
+                        <img
+                          src={message.text}
+                          alt="Image"
+                          style={{ maxWidth: "100%", maxHeight: "200px" }}
+                        />
+                      ) : (
+                        message.text
+                      )}
                       {message.file && (
                         <div className="">
                           <a
@@ -300,49 +356,71 @@ function ChatBox() {
           )}
         </div>
         {!!targetUserId && (
-          <form className="flex gap-2" onSubmit={sendMessage}>
-            <input
-              type="text"
-              value={newMessage}
-              onChange={(evt) => setNewMessage(evt.target.value)}
-              placeholder="New Message"
-              className="bg-white flex-grow border rounded-sm p-2"
-            />
-            <label className="bg-green-200 p-2 text-gray-600 cursor-pointer rounded-sm border border-green-200">
-              <input type="file" className="hidden" onChange={sendFile} />
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                className="w-6 h-6"
+          <>
+            <div className="flex mb-2 gap-2">
+              <form onSubmit={sendJoke} className="flex-1">
+                {" "}
+                <button className="text-white font-bold py-2 px-4 rounded-full border w-full h-full">
+                  Send a joke!
+                </button>
+              </form>
+              <form onSubmit={sendTarot} className="flex-1">
+                {" "}
+                <button className="text-white font-bold py-2 px-4 rounded-full border w-full h-full">
+                  Send a random tarot card!
+                </button>
+              </form>
+              <form onSubmit={sendQuote} className="flex-1">
+                {" "}
+                <button className="text-white font-bold py-2 px-4 rounded-full border w-full h-full">
+                  Send a quote!
+                </button>
+              </form>
+            </div>
+            <form className="flex gap-2" onSubmit={sendMessage}>
+              <input
+                type="text"
+                value={newMessage}
+                onChange={(evt) => setNewMessage(evt.target.value)}
+                placeholder="New Message"
+                className="bg-white flex-grow border rounded-sm p-2"
+              />
+              <label className="bg-green-200 p-2 text-gray-600 cursor-pointer rounded-sm border border-green-200">
+                <input type="file" className="hidden" onChange={sendFile} />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  className="w-6 h-6"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M18.97 3.659a2.25 2.25 0 00-3.182 0l-10.94 10.94a3.75 3.75 0 105.304 5.303l7.693-7.693a.75.75 0 011.06 1.06l-7.693 7.693a5.25 5.25 0 11-7.424-7.424l10.939-10.94a3.75 3.75 0 115.303 5.304L9.097 18.835l-.008.008-.007.007-.002.002-.003.002A2.25 2.25 0 015.91 15.66l7.81-7.81a.75.75 0 011.061 1.06l-7.81 7.81a.75.75 0 001.054 1.068L18.97 6.84a2.25 2.25 0 000-3.182z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </label>
+              <button
+                type="submit"
+                className="bg-green-500 p-2 text-white rounded-sm"
               >
-                <path
-                  fillRule="evenodd"
-                  d="M18.97 3.659a2.25 2.25 0 00-3.182 0l-10.94 10.94a3.75 3.75 0 105.304 5.303l7.693-7.693a.75.75 0 011.06 1.06l-7.693 7.693a5.25 5.25 0 11-7.424-7.424l10.939-10.94a3.75 3.75 0 115.303 5.304L9.097 18.835l-.008.008-.007.007-.002.002-.003.002A2.25 2.25 0 015.91 15.66l7.81-7.81a.75.75 0 011.061 1.06l-7.81 7.81a.75.75 0 001.054 1.068L18.97 6.84a2.25 2.25 0 000-3.182z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </label>
-            <button
-              type="submit"
-              className="bg-green-500 p-2 text-white rounded-sm"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-6 h-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"
-                />
-              </svg>
-            </button>
-          </form>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-6 h-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"
+                  />
+                </svg>
+              </button>
+            </form>
+          </>
         )}
       </div>
     </div>
