@@ -40,6 +40,7 @@ function HomepageForm() {
           const response = await axios.get(
             `${axios.defaults.baseURL}/api/flash-messages`
           );
+          console.log(response)
           isLoginOrRegister === "register"
             ? setFlashRegisterError(response.data.flashMessages.error)
             : setFlashLoginError(response.data.flashMessages.error);
